@@ -18,7 +18,12 @@ exports.existsByEmail= async (email) => {
     return await UserModel.exists({"account.email": email})
 };
 
-exports.createUser= async (post) => {
+exports.createUser= async (user) => {
+    console.log("Create user")
+    return await UserModel.create(user);
+};
+
+exports.getUserProfile= async (userid) => {
     console.log("Create user")
     return await UserModel.create(post);
 };
@@ -27,12 +32,12 @@ exports.getUserById = async (id) => {
     return await UserModel.findById(id);
 };
    
-exports.updateUser = async (id, post) => {
-    return await UserModel.findByIdAndUpdate(id, post);
+exports.updateUser = async (id, user) => {
+    return await UserModel.findByIdAndUpdate(id, user);
 };
 
-exports.verifyUser = async (id, post) => {
-    return await UserModel.findByIdAndUpdate(id, post);
+exports.verifyUser = async (id, user) => {
+    return await UserModel.findByIdAndUpdate(id, user);
 };
 
 exports.deleteUser = async (id) => {

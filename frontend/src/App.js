@@ -42,11 +42,19 @@ class App extends Component {
             this.state.contextPath === '/signup' || 
             this.state.contextPath === '/register';
   }
+
+  contextElement(contextPath){
+    console.log("switch context path: "+contextPath);
+     switch(contextPath){
+       default:
+         return <Home />;
+     }
+  }
   render(){
     return <div className="App">
             {this.state.isLoggedIn ? 
-              <Home />
-               : 
+                <Home />
+              : 
               <>
                 {this.isSignupContextPath()?<Signup /> : <Login /> }
               </>

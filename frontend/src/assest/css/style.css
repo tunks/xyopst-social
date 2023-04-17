@@ -1773,7 +1773,7 @@ header.transparent .topbar{
 }
 
 .post-content{
-    padding-top: 10px;
+    padding-top: 5px;
 }
 .friend-info {
     display: inline-block;
@@ -2058,9 +2058,13 @@ header.transparent .topbar{
 }
 .user-post .post-title{
 	width: auto;
-    color: #4d4a4a;
+    /*color: #4d4a4a; */
+    padding-bottom: 0px;
 }
 
+.user-post .post-title:a:hover{
+    color: #088dcd;
+}
 .user-post .icofont-dotted-right{
     font-size:  18px;
 }
@@ -7548,6 +7552,7 @@ table.table-striped tbody tr td a.button:hover {
     margin: 20px 0 0;
     padding-left: 0;
     width: 100%;
+    margin-top: 10px;
 }
 .upload-media > li {
     background: transparent none repeat scroll 0 0;
@@ -8357,9 +8362,12 @@ aside.sidebar .widget .activity-meta > i{
 /*--- like icons emojies ---*/
 .stat-tools {
     display: inline-block;
-    margin-top: 20px;
+    /*margin-top: 20px; */
     text-align: left;
     width: 100%;
+    /**refactor*/
+    border-top: 1px solid #ede9e9;
+    padding-top: 10px;
 }
 .stat-tools > a, .stat-tools > .box a {
     background: #eae9ee;
@@ -8374,6 +8382,29 @@ aside.sidebar .widget .activity-meta > i{
 }
 .stat-tools > .box{
     margin-right: 5px;
+}
+.vr{
+    display: inline-block;
+    width: 1px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 1px solid #d9d6d6;
+    height: 30px;
+}
+.min-profile-title{
+    text-align: center;
+    color: #0f6feced;
+    font-size: 18px;
+}
+.profile-stats{
+    margin-top: 10px;
+}
+.profile-stats-item{
+   display: inline-block;
+}
+
+.profile-stats-item h6{
+    font-weight: bold;
 }
 
 .stat-tools > a:hover,

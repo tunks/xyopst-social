@@ -18,6 +18,22 @@ class PostService {
       });
   }
 
+
+  getPost(postId, userId){
+    console.log('Get post detail - postId: '+postId +", userID: "+userId);
+    return axios
+      .get(API_URL + postId, {
+        params: {
+          userId: userId
+        }
+      })
+      .then(response => {
+        console.log("Get post response..")
+        console.log(response);
+        return response.data;
+      });
+  }
+
   savePost(post) {
     console.log("Save post")
     console.log(post)

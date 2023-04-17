@@ -9,73 +9,48 @@ import PostFeed from "./post-feed";
 import Connections from "./connections";
 import Following from './following';
 import Groups from '../group/groups';
-import AdImg from  '../assest/images/resources/ad-widget2.gif'
+import GroupList from '../group/group-list';
+import PostDetail from '../posts/post-detail'
+import Advertisment from "../ads/advertisment";
+import Events from "../events/events";
 import ClockImg from '../assest/images/clock.png';
 
 class Main extends Component {
   constructor(props) {
     super(props);
    // this.logOut = this.logOut.bind(this);
-    this.state = {};
+    this.state = {
+        contextPath: window.location.pathname
+    };
   }
   
   componentDidMount() {
     const user = AuthService.getCurrentUser();
     console.log("Home current user: "+user);
+    console.log("Main "+this.state.contextPath)
   }
   
+  getContextComponent(contextPath){
+    console.log("switch contextPath: "+contextPath);
+     const paths = contextPath.split("/")
+     const currentPath = (paths.length >0)? paths[1]: "";
+     console.log("currentPath: "+currentPath);
+     switch(currentPath){
+       case 'groups':
+          return <GroupList />;
+       case 'post':
+          return <PostDetail />;
+       default:
+          return <HomeComponent />;
+     }
+  }
   render(){
     return (<div class="theme-layout">
                 <Header />
                 <section>
                     <div class="gap">
                         <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div id="page-contents" class="row merged20">
-                                        <div class="col-lg-3">
-                                            <aside class="sidebar static left">    
-                                                  <MiniUserProfile  />   
-                                                  <Connections />
-                                                  <Following />
-
-                                            </aside>
-                                        </div>
-                                        <div class="col-lg-6">
-                                          <MainInlinePost/>
-                                          <PostFeed/> 
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <aside class="sidebar static right">
-                                                <Groups />
-                                                <div class="widget">
-                                                    <div class="advertisment-box">
-                                                        <h4 class=""><i class="icofont-info-circle"></i> advertisment</h4>
-                                                        <figure>
-                                                            <a title="Advertisment" href="/adverts"><img alt="" src={AdImg}/></a>
-                                                        </figure>
-                                                    </div>
-                                                </div>
-
-                                                <div class="widget">
-                                                    <h4 class="widget-title">Explor Events <a title="" href="/" class="see-all">See All</a></h4>
-                                                    <div class="rec-events bg-purple">
-                                                        <i class="icofont-microphone"></i>
-                                                        <h6><a href="/" title="">BZ University good night event in columbia</a></h6>
-                                                        <img src={ClockImg} alt="" />
-                                                    </div>
-                                                    <div class="rec-events bg-blue">
-                                                        <i class="icofont-microphone"></i>
-                                                        <h6><a href="/" title="">The 3rd International Conference 2020</a></h6>
-                                                        <img src={ClockImg} alt="" />
-                                                    </div>
-                                                </div>
-                                            </aside>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {this.getContextComponent(this.state.contextPath)}
                         </div>
                     </div>
                 </section>
@@ -92,6 +67,39 @@ class Main extends Component {
             </div>)
 
   }
+}
+
+
+class HomeComponent extends Component{
+    render(){
+        return(<div class="row">
+                <div class="col-lg-12">
+                    <div id="page-contents" class="row merged20">
+                        <div class="col-lg-3">
+                            <aside class="sidebar static left">    
+                                <MiniUserProfile  />   
+                                <Connections />
+                                <Following />
+
+                            </aside>
+                        </div>
+                        <div class="col-lg-6">
+                        <MainInlinePost/>
+                        <PostFeed/> 
+                        </div>
+                        <div class="col-lg-3">
+                            <aside class="sidebar static right">
+                                <Groups />
+                                <Advertisment />
+                                <Events />
+                            </aside>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+          );
+    }
 }
 
 export default Main;

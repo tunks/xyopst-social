@@ -7,6 +7,7 @@ import './assest/css/style.css'
 import './assest/css/style2.css'
 import './assest/css/color.css'
 import './assest/css/responsive.css'
+// import './assest/css/uikit.min.css'
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';

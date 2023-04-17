@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Search  from "./search";
 import AuthService from '../auth/auth_service' 
 import LogoImg from  '../assest/images/logo.png';
+import GroupModal from "../group/group-modal";
+import PostPopup from "./post-popup";
 
 class Header extends Component{
     constructor(props) {
@@ -40,7 +42,7 @@ class Header extends Component{
 
                     <ul class="web-elements">
                         <li>
-                            <a href="index.html" title="Home" data-toggle="tooltip">
+                            <a href="/" title="Home" data-toggle="tooltip">
                                 <i>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></i>
                             </a>
@@ -59,17 +61,25 @@ class Header extends Component{
                             </a>
                             <span></span>
                         </li>
-                        <li>
-                            <a class="create" href="/" title="Add New" data-toggle="tooltip">
+                        {/* <li>
+                             <a class="create" href="/" title="Add New" data-toggle="tooltip">
                                 <i>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></i>
                             </a>
-                        </li>
+                            <ul class="dropdown">
+                                <li><a href="profile.html" title=""><i class="icofont-speech-comments"></i>
+                                 Create New Post</a></li>
+                                <li><a href="add-new-course.html" title=""><i class="icofont-ui-user-group"></i> Create New Group</a></li>
+                                <li><a class="invite-new" href="#" title=""><i class="icofont-brand-slideshare"></i> Create Event</a></li>
+                            </ul>
+                            <GroupModal open={this.state.open} handleClose={this.handleClose}/> 
+                        </li> */}
+                        <AddElementMenu />
                         <li>
                             <div>
                              	
 
-                                <a class="create" href="/" title="Add New" data-toggle="tooltip">
+                                <a class="create" href="/" title="Profile" data-toggle="tooltip">
                                     <i>
                                        {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
                                        class="icofont-user-alt-3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -88,5 +98,71 @@ class Header extends Component{
     </header>;
   }
 }
+
+class AddElementMenu extends Component{
+    constructor(props) {
+        super(props);
+        this.createNewGroup = this.createNewGroup.bind(this);
+        this.createNewPost = this.createNewPost.bind(this);
+        this.createNewEvent = this.createNewEvent.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.state = {
+            newGroup: false,
+            newPost: false,
+            newEvent: false
+        }
+     }
+
+    createNewGroup(e){
+        e.preventDefault()
+        this.setState({newGroup: true, 
+                       newPost: false,
+                       newEvent: false});
+    }
+
+    createNewPost(e){
+        e.preventDefault()
+        this.setState({newGroup: false, 
+                       newPost: true,
+                       newEvent: false});
+    }
+
+    createNewEvent(e){
+        e.preventDefault()
+        this.setState({newGroup: false, 
+                       newPost: false,
+                       newEvent: true});
+    }
+
+    handleClose (){
+        this.setState({
+            newGroup: false,
+            newPost: false,
+            newEvent: false
+        })
+    }
+    render(){
+        return (
+            <li>
+                   <a class="create" href="/" title="Add New" data-toggle="tooltip">
+                                <i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></i>
+                            </a>
+                            <ul class="dropdown" style={{left: '-50px'}}>
+                                <li><a href="/" title="" onClick={this.createNewPost}><i class="icofont-speech-comments"></i>
+                                 Create New Post</a></li>
+                                <li><a href="/" title="" onClick={this.createNewGroup}><i class="icofont-ui-user-group"></i> Create New Group</a></li>
+                                <li><a class="invite-new" href="/" title="" onClick={this.createNewEvent}><i class="icofont-brand-slideshare"></i> Create Event</a></li>
+                                <li><a class="invite-new" href="/" title="" onClick={this.createNewEvent}><i class="icofont-brand-slideshare"></i> Create Chatroom</a></li>
+                                <li><a class="invite-new" href="/" title="" onClick={this.createNewEvent}><i class="icofont-brand-slideshare"></i> Invite Friends</a></li>
+                            </ul>
+                        <GroupModal open={this.state.newGroup} handleClose={this.handleClose}/>
+                        <PostPopup open={this.state.newPost} handleClose={this.handleClose}/>
+            </li>
+        );
+    }
+}
+
+
 
 export default Header;

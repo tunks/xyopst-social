@@ -1,22 +1,80 @@
 import React, { Component } from "react";
-import AuthService from '../auth/auth_service';
-import UserPostControl from "./user-post-control";
-import UserPostStats from "./user-post-stats";
-import PostComment from "./post-comment";
+import AuthService from '../auth/auth_service'
+import PostService from './post_service';
+import Advertisment from "../ads/advertisment";
+import Events from "../events/events";
+import UserPostStats from "../views/user-post-stats";
+import PostComment from "../views/post-comment"; 
 import UserImage from '../assest/images/resources/user_avatar1.png'
 import DateUtil from "../utils/date-utils";
 
-class UserPost extends Component {
+class PostDetail extends Component {
   constructor(props) {
     super(props);
-    const data = this.props.data
+    const paths = window.location.pathname.split("/");
+    const postId = paths.length > 0? paths[paths.length - 1]: "";
+    console.log("PostDetail , path:->postId "+postId);
     this.state = {
-        post: data.post,
-        userprofile: data.userprofile
+        postId: postId,
     };
   }
 
+  render(){
+    return (
+        <div class="row">
+					<div class="col-lg-12">
+						<div id="page-contents" class="row merged20">
+							<div class="col-lg-9">
+                                <UserPostDetail postId={this.state.postId}/>
+							</div>
+							<div class="col-lg-3">
+								<aside class="sidebar static right">
+									<div class="widget">
+										<h4 class="widget-title">Ask Research Question?</h4>
+										<div class="ask-question">
+											<i class="icofont-question-circle"></i>
+											<h6>Ask questions in Q&A to get help from experts in your field.</h6>
+											<a class="ask-qst" href="/" title="">Ask a question</a>
+										</div>
+									</div>
+                                    <Advertisment />
+                                    <Events />
+								</aside>
+							</div>
+						</div>
+					</div>
+                </div>
+    );
+  }
+}
+
+
+class UserPostDetail extends Component {
+  constructor(props) {
+    super(props);
+    console.log("UserPostDetail ..props");
+    console.log(this.props);
+    this.state = {
+        postId: this.props.postId,
+        post: {},
+        userprofile: {}
+    };
+  }
+  
   componentDidMount() {
+    this.fetchPost();
+  }
+  
+  fetchPost(){
+    const currentUser = AuthService.getCurrentUser();
+    PostService.getPost(this.state.postId,currentUser.id)
+    .then(response =>{
+        console.log("Get post");
+        console.log(response);
+        var data = response.data
+        this.setState({ post: data.post, 
+                        userprofile: data.userprofile});
+    })
   }
 
 
@@ -74,20 +132,15 @@ class UserPost extends Component {
                                 </div>
                         </div>
                         <ins>
-                            <a title="verified" href={this.getUserLink()}>{this.getFullName()} </a> 
-                            {/* <span class="v-divider"></span> */}
-                            <i class="icofont-dotted-right"></i>
-                             <a href={this.getPostLink()} class="post-title">
-                                  {this.state.post.title}
-                             </a>
+                            <a title="verified" href={this.getUserLink()}>{this.getFullName()} </a>                            
                              </ins>
                         <span><i class="icofont-globe"></i> published: {this.getCreatedDate()}</span>
                     </div>
 
                     <div class="post-meta">
-                            {/* <a href="post-detail.html" class="post-title">
+                             <span class="post-title">
                                 {this.state.post.title}
-                                </a> */}
+                              </span>
                             <div>
                                <div></div>
                                <div class="post-content"> 
@@ -97,7 +150,7 @@ class UserPost extends Component {
                             
                             {/* <UserPostControl /> */}
                             <UserPostStats />
-                            <PostComment postId={this.state.post.id}/>
+                            <PostComment postId={this.state.postId}/>
                     </div>
 
                </div>
@@ -107,4 +160,4 @@ class UserPost extends Component {
   }
 }
 
-export default UserPost
+export default PostDetail;

@@ -5,6 +5,7 @@ const express = require("express");
 const PostService = require('./services/PostService')
 const AuthService = require('./services/AuthService')
 const CommentService = require('./services/CommentService')
+const GroupService = require('./services/GroupService')
 const TokenUtil = require('./utils/JwtTokenUtil')
 const DataUtil = require('./utils/DataUtil');
 const { cachedDataVersionTag } = require('v8');
@@ -28,11 +29,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
 
-app.get('/join', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
-});
-
-app.get('/login', (req, res) => {
+app.get(['/join','login'], (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
 
@@ -45,6 +42,23 @@ app.get('/confirmation', async(req, res) => {
   res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
 });
 
+app.get('/post/*', async(req, res) => {
+  console.log("post "+code);
+  var code = req.query.code;
+  res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
+});
+
+app.get('/profile/*', async(req, res) => {
+  console.log("Profile "+code);
+  var code = req.query.code;
+  res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
+});
+
+app.get(['/groups', '/groups/*'], async(req, res) => {
+  console.log("groups "+code);
+  var code = req.query.code;
+  res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
+});
 const router = express.Router();
 // router.use(bodyParser.urlencoded({ extended: false }));
 
@@ -114,6 +128,24 @@ app.get('/api/v1/posts/', async (req, res) => {
     }
 });
 
+app.get('/api/v1/posts/:postId', async (req, res) => {
+  console.log("Get post by Id..");
+  console.log(req.body);
+    try {
+      var postId = req.params.postId;
+      //const posts = await PostService.findAllPosts(userId)
+      const posts = await PostService.getPostById(postId)
+      if(posts && posts.length> 0)
+        res.json({ data: posts[0], status: "success" });
+      else{
+        res.status(404).json({error: "Data not found"})
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
+    }
+});
+
 
 app.post('/api/v1/posts/comments', async(req, res) => {
   console.log(req.body);
@@ -134,6 +166,32 @@ app.get('/api/v1/posts/:postId/comments', async(req, res) => {
     const comments = await CommentService.findAllCommentsByPost(postId);
     console.log(comments);
     res.json({ comments: comments, status: "success" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+//groups
+app.post('/api/v1/groups/', async(req, res) => {
+  try {
+    console.log("Create new group ");
+    console.log(req.body);
+    const group = await GroupService.createGroup(req.body);
+    res.json({ data: group, status: "success" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/v1/groups', async(req, res) => {
+  console.log(req.body);
+  try {
+    console.log("Get Groups ");
+    const groups = await GroupService.findAllGroups()
+    res.json({ data: groups, status: "success" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

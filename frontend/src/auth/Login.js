@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import AuthService from './auth_service';
 //import { withRouter } from '../common/with-router';
 import './Login.css';
@@ -18,7 +18,8 @@ class Login extends React.Component{
           username: "",
           password: "",
           loading: false,
-          message: ""
+          message: "",
+          loginError: false
         };
       }
     
@@ -46,7 +47,8 @@ class Login extends React.Component{
     
         this.setState({
           message: "",
-          loading: true
+          loading: true,
+          loginError: false
         });
     
         //this.form.validateAll();
@@ -67,11 +69,15 @@ class Login extends React.Component{
                   error.response.data.message) ||
                 error.message ||
                 error.toString();
-    
+              const data = error.response.data;
               this.setState({
                 loading: false,
-                message: resMessage
+                message: data.error,
+                loginError: true
               });
+
+              console.log("loggin error:: ");
+              console.log(useRouteLoaderData);
             }
           );
 
@@ -83,7 +89,6 @@ class Login extends React.Component{
       }
     
     render() {
-        /*return <LoginTemplate handleLogin={this.handleLogin}/>*/
         return  <div>
                   <section>
                     <div class="gap no-gap signin whitish medium-opacity register">
@@ -105,6 +110,11 @@ class Login extends React.Component{
                                         <div class="reg-from">
                                                 <div class="login-form">
                                                         <h4><i class="icofont-key-hole"></i> Login</h4>
+                                                        {this.state.loginError? 
+                                                        <div class="alert alert-danger" role="alert">
+                                                               {this.state.message}
+                                                          </div>
+                                                        :<></>}
                                                         <form method="post" class="c-form" onSubmit={this.handleLogin}>
                                                             <input type="text" placeholder="Username @"  
                                                                 name="username"
